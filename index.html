@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Rifa Diaria</title>
+  <meta name="description" content="Mira los números disponibles y separa el tuyo.">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f766e'/%3E%3Ctext x='32' y='43' font-size='30' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3E07%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="barra">
+    <a href="/" class="marca">Rifa Diaria</a>
+  </header>
+
+  <main id="app" class="contenido">
+    <p class="cargando">Cargando…</p>
+  </main>
+
+  <!-- Barra fija con los números elegidos -->
+  <div id="carrito" class="carrito" hidden>
+    <div class="carrito-info">
+      <strong id="carrito-cuenta">0 números</strong>
+      <span id="carrito-total"></span>
+    </div>
+    <button id="carrito-limpiar" class="boton boton-suave" type="button">Quitar</button>
+    <button id="carrito-separar" class="boton" type="button">Separar</button>
+  </div>
+
+  <!-- Formulario para separar -->
+  <dialog id="formulario" class="ventana">
+    <form id="form-separar" method="dialog" novalidate>
+      <h2>Separar números</h2>
+      <p class="elegidos" id="form-elegidos"></p>
+      <label>Nombre completo
+        <input name="nombre" autocomplete="name" required minlength="2" maxlength="80">
+      </label>
+      <label>WhatsApp
+        <input name="whatsapp" type="tel" inputmode="tel" autocomplete="tel" required placeholder="300 123 4567">
+      </label>
+      <label>Ciudad
+        <input name="ciudad" autocomplete="address-level2" required minlength="2" maxlength="60">
+      </label>
+      <p class="error" id="form-error" hidden></p>
+      <div class="acciones">
+        <button type="button" class="boton boton-suave" id="form-cancelar">Cancelar</button>
+        <button type="submit" class="boton" id="form-enviar">Separar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Confirmación -->
+  <dialog id="listo" class="ventana">
+    <div class="listo">
+      <div class="listo-icono" aria-hidden="true">✓</div>
+      <h2>¡Números separados!</h2>
+      <p id="listo-detalle"></p>
+      <div class="listo-numeros" id="listo-numeros"></div>
+      <p class="listo-total" id="listo-total"></p>
+      <p class="nota">Toma captura de pantalla. Tus números quedan separados hasta que confirmes el pago.</p>
+      <button type="button" class="boton" id="listo-cerrar">Entendido</button>
+    </div>
+  </dialog>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
