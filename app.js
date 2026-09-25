@@ -59,6 +59,15 @@ function toast(texto) {
   toastTimer = setTimeout(() => t.remove(), 4000);
 }
 
+// Enlaces fijos por tipo (/2cifras y /3cifras) para mandar al grupo:
+// siempre llevan a la rifa abierta de ese tipo, sin importar cuál sea hoy.
+function tipoActual() {
+  const m = location.pathname.match(/^\/([23])cifras\/?$/);
+  if (m) return Number(m[1]);
+  const t = new URLSearchParams(location.search).get('tipo');
+  return t === '2' || t === '3' ? Number(t) : null;
+}
+
 function slugActual() {
   const m = location.pathname.match(/^\/r\/([a-z0-9-]+)\/?$/);
   if (m) return m[1];
@@ -77,8 +86,9 @@ function rango(cifras) {
 
 /* ---------- Lista de rifas ---------- */
 
-async function mostrarLista() {
-  document.title = 'Rifa Diaria';
+async function mostrarLista(tipo = null) {
+  const nombreTipo = tipo ? `Rifa de ${tipo} cifras` : 'Rifas de hoy';
+  document.title = tipo ? `${nombreTipo} · Rifa Diaria` : 'Rifa Diaria';
   carrito.hidden = true;
   let rifas;
   try {
@@ -87,12 +97,18 @@ async function mostrarLista() {
     app.replaceChildren(el('p', { class: 'vacio' }, 'No pudimos cargar las rifas. Revisa tu conexión y vuelve a intentar.'));
     return;
   }
+  if (tipo) {
+    rifas = rifas.filter((r) => r.cifras === tipo);
+    // Con una sola rifa abierta de ese tipo, se entra directo a ella.
+    if (rifas.length === 1) { mostrarRifa(rifas[0].slug); return; }
+  }
   if (!rifas.length) {
-    app.replaceChildren(el('h1', {}, 'Rifas de hoy'), el('p', { class: 'vacio' }, 'No hay rifas abiertas en este momento.'));
+    app.replaceChildren(el('h1', {}, nombreTipo), el('p', { class: 'vacio' },
+      tipo ? `No hay una rifa de ${tipo} cifras abierta en este momento.` : 'No hay rifas abiertas en este momento.'));
     return;
   }
   app.replaceChildren(
-    el('h1', {}, 'Rifas de hoy'),
+    el('h1', {}, nombreTipo),
     el('div', { class: 'tarjetas' }, rifas.map((r) =>
       el('a', { class: 'tarjeta', href: enlaceRifa(r.slug) },
         el('span', { class: 'etiqueta' }, r.cifras === 2 ? '2 cifras · 00–99' : '3 cifras · 000–999'),
@@ -370,6 +386,11 @@ document.getElementById('listo-cerrar').addEventListener('click', () => listo.cl
 
 /* ---------- Arranque ---------- */
 
+const tipo = tipoActual();
 const slug = slugActual();
-if (slug) mostrarRifa(slug);
+if (tipo) {
+  // Que el logo lleve de vuelta a este mismo tipo, no a la lista general.
+  document.querySelector('.marca').href = location.pathname + location.search;
+  mostrarLista(tipo);
+} else if (slug) mostrarRifa(slug);
 else mostrarLista();
