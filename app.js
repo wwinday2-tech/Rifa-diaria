@@ -200,14 +200,14 @@ function dibujarRifa() {
       onclick: () => { estado.centena = i; estado.busqueda = ''; buscar.value = ''; dibujarCentenas(); dibujarCuadricula(); },
     }, `${i}00–${i}99`)));
 
-  app.replaceChildren(
+  app.replaceChildren(...[
     cabecera,
     el('div', { class: 'herramientas' }, buscar, solo, azar),
     centenas,
     el('div', { class: 'leyenda' },
       el('span', {}, 'Disponible'), el('span', { class: 'l-elegido' }, 'Elegido'), el('span', { class: 'l-ocupado' }, 'Ocupado')),
     el('div', { class: 'cuadricula', id: 'cuadricula' }),
-  );
+  ].filter(Boolean));
   dibujarCuadricula();
   actualizarCarrito();
 }
