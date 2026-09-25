@@ -1,62 +1,29 @@
-/* Winday — base clara y neutra; el lima del logo solo como acento. */
+/* Winday — fondo verde claro sacado del lima del logo; siempre claro
+   (sin modo oscuro, a pedido de Juan: el fondo negro opacaba el logo). */
 :root {
-  --fondo: #f7f7f4;
+  --fondo: #f3f9e4;
   --superficie: #ffffff;
-  --suave: #efefea;
+  --suave: #e9f1d4;
   --texto: #0e0e0e;
-  --texto-suave: #6b6b66;
-  --texto-tenue: #a3a39c;
-  --borde: #e6e6e0;
+  --texto-suave: #5f6752;
+  --texto-tenue: #9ba48b;
+  --borde: #dde6c6;
   --lima: #c9f24d;
-  --lima-claro: #f1fbd2;
+  --lima-claro: #e8f8b4;
   --oliva: #5b8216;
   --tinta: #0e0e0e;
   --tinta-texto: #ffffff;
   --error: #b42318;
-  --sombra: 0 12px 32px rgba(14, 14, 14, 0.10);
+  --sombra: 0 12px 32px rgba(40, 60, 10, 0.12);
   --radio: 16px;
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --fondo: #0e0e0e;
-    --superficie: #171716;
-    --suave: #1f1f1d;
-    --texto: #f4f4f0;
-    --texto-suave: #a3a39c;
-    --texto-tenue: #5d5d58;
-    --borde: #2a2a27;
-    --lima-claro: #26300f;
-    --oliva: #c9f24d;
-    --tinta: #f4f4f0;
-    --tinta-texto: #0e0e0e;
-    --error: #ff8a80;
-    --sombra: 0 12px 32px rgba(0, 0, 0, 0.5);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --fondo: #0e0e0e;
-  --superficie: #171716;
-  --suave: #1f1f1d;
-  --texto: #f4f4f0;
-  --texto-suave: #a3a39c;
-  --texto-tenue: #5d5d58;
-  --borde: #2a2a27;
-  --lima-claro: #26300f;
-  --oliva: #c9f24d;
-  --tinta: #f4f4f0;
-  --tinta-texto: #0e0e0e;
-  --error: #ff8a80;
-  --sombra: 0 12px 32px rgba(0, 0, 0, 0.5);
-  color-scheme: dark;
-}
 
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; background: var(--fondo); }
 body {
   margin: 0;
-  background: var(--fondo);
+  background: linear-gradient(180deg, #e3f5b0 0, var(--fondo) 340px) no-repeat, var(--fondo);
   color: var(--texto);
   font: 16px/1.5 "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -77,6 +44,7 @@ button { font-family: inherit; }
   padding-top: max(16px, env(safe-area-inset-top));
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .marca {
   display: inline-flex;
@@ -84,10 +52,10 @@ button { font-family: inherit; }
   gap: 10px;
   text-decoration: none;
   font-weight: 800;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   letter-spacing: -0.03em;
 }
-.marca img { width: 36px; height: 36px; display: block; }
+.marca img { width: 42px; height: 42px; display: block; }
 .marca span { color: var(--oliva); }
 
 .contenido { max-width: 720px; margin: 0 auto; padding: 8px 16px 16px; }
@@ -139,12 +107,15 @@ button { font-family: inherit; }
 .fecha { color: var(--texto-suave); font-size: 0.9rem; margin: 12px 0 0; }
 .fecha::first-letter { text-transform: uppercase; }
 
-.rifa-cabecera { margin: 4px 0 24px; }
-.rifa-cabecera h1 { margin-top: 8px; }
-.aviso { color: var(--texto-suave); font-size: 0.9rem; margin: 0 0 12px; }
+.loteria { color: var(--oliva); font-weight: 700; font-size: 1rem; margin: 4px 0 0; }
+
+.rifa-cabecera { margin: 8px 0 24px; text-align: center; }
+.rifa-cabecera h1 { margin-top: 10px; }
+.rifa-cabecera .cifra { text-align: center; }
+.aviso { color: var(--texto-suave); font-size: 0.9rem; margin: 0 0 12px; text-align: center; }
 
 /* ---------- Lista de rifas ---------- */
-.titulo-lista { margin: 4px 0 16px; }
+.titulo-lista { margin: 8px 0 20px; text-align: center; }
 .tarjetas { display: grid; gap: 12px; }
 .tarjeta {
   display: block;

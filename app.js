@@ -87,7 +87,7 @@ function rango(cifras) {
 /* ---------- Piezas compartidas ---------- */
 
 function etiquetaTipo(cifras) {
-  return el('span', { class: 'etiqueta' }, cifras === 2 ? '2 cifras · 00 al 99' : '3 cifras · 000 al 999');
+  return el('span', { class: 'etiqueta' }, cifras === 2 ? 'Números del 00 al 99' : 'Números del 000 al 999');
 }
 
 // Premio, valor y disponibles en tres casillas, y la fecha del sorteo debajo.
@@ -131,6 +131,7 @@ async function mostrarLista(tipo = null) {
       el('a', { class: 'tarjeta', href: enlaceRifa(r.slug) },
         etiquetaTipo(r.cifras),
         el('h2', {}, r.titulo),
+        r.loteria && el('p', { class: 'loteria' }, `Lotería ${r.loteria}`),
         datosRifa(r, r.disponibles),
       ))),
   );
@@ -202,6 +203,7 @@ function dibujarRifa() {
   const cabecera = el('section', { class: 'rifa-cabecera' },
     etiquetaTipo(r.cifras),
     el('h1', {}, r.titulo),
+    r.loteria && el('p', { class: 'loteria' }, `Lotería ${r.loteria}`),
     datosRifa(r, disponibles(), 'conteo'),
   );
 
