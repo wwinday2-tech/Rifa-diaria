@@ -152,6 +152,9 @@ let refresco;
 async function cargarRifa(slug) {
   const rifa = await rpc('rifa_publica', { p_slug: slug });
   if (!rifa) return null;
+  // Pasada la hora del sorteo ya no se separa (el servidor también lo rechaza).
+  rifa.yaJugo = Boolean(rifa.fecha_sorteo && new Date(rifa.fecha_sorteo) <= new Date());
+  if (rifa.yaJugo) rifa.estado = 'cerrada';
   estado.rifa = rifa;
   estado.ocupados = new Set(rifa.ocupados.map((o) => o.n));
   // Si alguien más separó un número que yo tenía elegido, lo quito y aviso.
@@ -181,7 +184,12 @@ async function mostrarRifa(slug) {
   clearInterval(refresco);
   refresco = setInterval(async () => {
     if (document.hidden || formulario.open) return;
-    try { await cargarRifa(slug); dibujarCuadricula(); dibujarCabeceraConteo(); actualizarCarrito(); } catch { /* reintenta en el siguiente ciclo */ }
+    try {
+      const antes = estado.rifa.estado;
+      await cargarRifa(slug);
+      if (estado.rifa.estado !== antes) { estado.elegidos.clear(); dibujarRifa(); return; }
+      dibujarCuadricula(); dibujarCabeceraConteo(); actualizarCarrito();
+    } catch { /* reintenta en el siguiente ciclo */ }
   }, REFRESCO_MS);
 }
 
@@ -197,6 +205,7 @@ function dibujarCabeceraConteo() {
 
 function dibujarRifa() {
   const r = estado.rifa;
+  const yaJugo = r.yaJugo;
   const abierta = r.estado === 'abierta';
   const tresCifras = r.cifras === 3;
 
@@ -232,7 +241,9 @@ function dibujarRifa() {
     cabecera,
     el('p', { class: 'aviso' }, abierta
       ? 'Toca los números que quieras y luego presiona «Separar».'
-      : 'Esta rifa está cerrada. Ya no se pueden separar números.'),
+      : yaJugo
+        ? 'Ya es la hora del sorteo: no se pueden separar más números. Pronto abre la siguiente rifa.'
+        : 'Esta rifa está cerrada. Ya no se pueden separar números.'),
     el('div', { class: 'herramientas' }, buscar, solo, azar),
     centenas,
     el('div', { class: 'leyenda' },

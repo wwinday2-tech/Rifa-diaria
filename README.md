@@ -1,8 +1,17 @@
-# Rifa Diaria
+# Winday — rifas diarias
 
-Página para ver los números disponibles de las rifas (2 cifras: 00–99, 3 cifras: 000–999) y separarlos.
+Dos sitios estáticos (HTML + JS, sin compilación) en el mismo repositorio, cada uno con su proyecto de Vercel:
 
-- Sitio estático (HTML + JS, sin compilación) publicado en Vercel; cada push a `main` sale a producción.
-- Datos en Supabase. La página solo usa tres funciones: `rifas_abiertas`, `rifa_publica` y `separar_numeros`.
-  Las tablas (`rifas`, `boletas`, `abonos`) no se pueden leer desde la página, así que nadie ve nombres ni teléfonos ajenos.
-- Enlace de una rifa para mandar al grupo: `/r/<slug-de-la-rifa>`.
+| Carpeta    | Proyecto Vercel | Para qué |
+|------------|-----------------|----------|
+| `publico/` | `rifa-diaria`   | Página que se manda al grupo: `/2cifras`, `/3cifras` (y `/r/<slug>`). Ver números y separarlos. |
+| `admin/`   | `winday-admin`  | Panel: clientes, abonos, registrar boletas, crear rifas, cerrar y reiniciar, historial. |
+
+Cada push a `main` publica los dos.
+
+## Datos (Supabase)
+
+- Tablas: `rifas`, `boletas`, `abonos` (por cliente = WhatsApp dentro de una rifa), `admins`.
+- La página pública solo usa `rifas_abiertas`, `rifa_publica` y `separar_numeros`; no puede leer las tablas.
+- El panel entra con Supabase Auth (correo y contraseña). Solo ven y cambian datos los correos que estén en `admins`.
+- «Cerrar y reiniciar» (`admin_reiniciar_rifa`) deja la rifa en el historial con su número ganador y abre una igual para el día siguiente.
