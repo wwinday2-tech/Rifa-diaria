@@ -84,11 +84,29 @@ function rango(cifras) {
   return Array.from({ length: total }, (_, i) => String(i).padStart(cifras, '0'));
 }
 
+/* ---------- Piezas compartidas ---------- */
+
+function etiquetaTipo(cifras) {
+  return el('span', { class: 'etiqueta' }, cifras === 2 ? '2 cifras · 00 al 99' : '3 cifras · 000 al 999');
+}
+
+// Premio, valor y disponibles en tres casillas, y la fecha del sorteo debajo.
+function datosRifa(r, cuantosDisponibles, idConteo) {
+  return [
+    el('div', { class: 'cifras' },
+      el('div', { class: 'cifra cifra-destacada' }, el('small', {}, 'Premio'), el('strong', { title: r.premio || '' }, r.premio || '—')),
+      el('div', { class: 'cifra' }, el('small', {}, 'Valor'), el('strong', {}, pesos.format(r.precio))),
+      el('div', { class: 'cifra' }, el('small', {}, 'Disponibles'), el('strong', { id: idConteo }, String(cuantosDisponibles))),
+    ),
+    r.fecha_sorteo && el('p', { class: 'fecha' }, `Juega el ${fecha.format(new Date(r.fecha_sorteo))}`),
+  ];
+}
+
 /* ---------- Lista de rifas ---------- */
 
 async function mostrarLista(tipo = null) {
   const nombreTipo = tipo ? `Rifa de ${tipo} cifras` : 'Rifas de hoy';
-  document.title = tipo ? `${nombreTipo} · Rifa Diaria` : 'Rifa Diaria';
+  document.title = tipo ? `${nombreTipo} · Winday` : 'Winday';
   carrito.hidden = true;
   let rifas;
   try {
@@ -103,22 +121,17 @@ async function mostrarLista(tipo = null) {
     if (rifas.length === 1) { mostrarRifa(rifas[0].slug); return; }
   }
   if (!rifas.length) {
-    app.replaceChildren(el('h1', {}, nombreTipo), el('p', { class: 'vacio' },
+    app.replaceChildren(el('h1', { class: 'titulo-lista' }, nombreTipo), el('p', { class: 'vacio' },
       tipo ? `No hay una rifa de ${tipo} cifras abierta en este momento.` : 'No hay rifas abiertas en este momento.'));
     return;
   }
   app.replaceChildren(
-    el('h1', {}, nombreTipo),
+    el('h1', { class: 'titulo-lista' }, nombreTipo),
     el('div', { class: 'tarjetas' }, rifas.map((r) =>
       el('a', { class: 'tarjeta', href: enlaceRifa(r.slug) },
-        el('span', { class: 'etiqueta' }, r.cifras === 2 ? '2 cifras · 00–99' : '3 cifras · 000–999'),
-        el('h2', { style: 'margin-top:8px' }, r.titulo),
-        el('div', { class: 'datos' },
-          r.premio && el('span', {}, 'Premio: ', el('strong', {}, r.premio)),
-          el('span', {}, 'Valor: ', el('strong', {}, pesos.format(r.precio))),
-          el('span', {}, el('strong', {}, String(r.disponibles)), ' disponibles'),
-          r.fecha_sorteo && el('span', {}, 'Juega: ', fecha.format(new Date(r.fecha_sorteo))),
-        ),
+        etiquetaTipo(r.cifras),
+        el('h2', {}, r.titulo),
+        datosRifa(r, r.disponibles),
       ))),
   );
 }
@@ -162,7 +175,7 @@ async function mostrarRifa(slug) {
     app.replaceChildren(el('p', { class: 'vacio' }, 'Esta rifa no existe. ', el('a', { href: '/' }, 'Ver rifas abiertas')));
     return;
   }
-  document.title = `${rifa.titulo} · Rifa Diaria`;
+  document.title = `${rifa.titulo} · Winday`;
   dibujarRifa();
   clearInterval(refresco);
   refresco = setInterval(async () => {
@@ -187,37 +200,37 @@ function dibujarRifa() {
   const tresCifras = r.cifras === 3;
 
   const cabecera = el('section', { class: 'rifa-cabecera' },
-    el('span', { class: 'etiqueta' }, tresCifras ? '3 cifras · 000–999' : '2 cifras · 00–99'),
-    el('h1', { style: 'margin-top:8px' }, r.titulo),
-    el('div', { class: 'datos' },
-      r.premio && el('span', {}, 'Premio: ', el('strong', {}, r.premio)),
-      el('span', {}, 'Valor: ', el('strong', {}, pesos.format(r.precio))),
-      el('span', {}, el('strong', { id: 'conteo' }, String(disponibles())), ' disponibles'),
-      r.fecha_sorteo && el('span', {}, 'Juega: ', fecha.format(new Date(r.fecha_sorteo))),
-    ),
-    abierta
-      ? el('p', { class: 'aviso' }, 'Toca los números que quieras y luego presiona «Separar».')
-      : el('p', { class: 'aviso' }, 'Esta rifa está cerrada. Ya no se pueden separar números.'),
+    etiquetaTipo(r.cifras),
+    el('h1', {}, r.titulo),
+    datosRifa(r, disponibles(), 'conteo'),
   );
 
   const buscar = el('input', {
     class: 'buscar', type: 'search', inputmode: 'numeric', maxlength: String(r.cifras),
-    placeholder: `Buscar número (${tresCifras ? '000' : '00'})`, 'aria-label': 'Buscar número',
+    placeholder: 'Buscar número', 'aria-label': 'Buscar número',
     oninput: (e) => { estado.busqueda = e.target.value.replace(/\D/g, ''); dibujarCuadricula(); },
   });
-  const solo = el('label', { class: 'interruptor' },
-    el('input', { type: 'checkbox', onchange: (e) => { estado.soloDisponibles = e.target.checked; dibujarCuadricula(); } }),
-    'Solo disponibles');
-  const azar = abierta && el('button', { class: 'boton boton-suave', type: 'button', onclick: elegirAlAzar }, 'Al azar');
+  const solo = el('button', {
+    class: 'chip', type: 'button', 'aria-pressed': String(estado.soloDisponibles),
+    onclick: (e) => {
+      estado.soloDisponibles = !estado.soloDisponibles;
+      e.currentTarget.setAttribute('aria-pressed', String(estado.soloDisponibles));
+      dibujarCuadricula();
+    },
+  }, 'Libres');
+  const azar = abierta && el('button', { class: 'chip', type: 'button', onclick: elegirAlAzar }, 'Al azar');
 
   const centenas = tresCifras && el('div', { class: 'centenas', role: 'group', 'aria-label': 'Rango de números' },
     Array.from({ length: 10 }, (_, i) => el('button', {
       class: 'centena', type: 'button', 'aria-pressed': String(i === estado.centena), 'data-c': String(i),
       onclick: () => { estado.centena = i; estado.busqueda = ''; buscar.value = ''; dibujarCentenas(); dibujarCuadricula(); },
-    }, `${i}00–${i}99`)));
+    }, `${i}00 – ${i}99`)));
 
   app.replaceChildren(...[
     cabecera,
+    el('p', { class: 'aviso' }, abierta
+      ? 'Toca los números que quieras y luego presiona «Separar».'
+      : 'Esta rifa está cerrada. Ya no se pueden separar números.'),
     el('div', { class: 'herramientas' }, buscar, solo, azar),
     centenas,
     el('div', { class: 'leyenda' },
@@ -304,8 +317,9 @@ document.getElementById('carrito-limpiar').addEventListener('click', () => {
 });
 
 function resumenFormulario() {
-  document.getElementById('form-elegidos').textContent =
-    `${ordenados().join(', ')} · Total ${pesos.format(estado.elegidos.size * estado.rifa.precio)}`;
+  document.getElementById('form-elegidos').replaceChildren(
+    el('strong', {}, ordenados().join(', ')),
+    ` · Total ${pesos.format(estado.elegidos.size * estado.rifa.precio)}`);
 }
 
 document.getElementById('carrito-separar').addEventListener('click', () => {
