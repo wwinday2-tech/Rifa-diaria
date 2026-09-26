@@ -1,4 +1,4 @@
-// Panel de administración de Winday.
+// Panel de administración de GanaHoy.
 // Entra con correo y contraseña (Supabase Auth); solo los correos de la tabla
 // `admins` ven datos: las políticas de la base bloquean a cualquier otro.
 
@@ -6,7 +6,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const SUPABASE_URL = 'https://tpynlhzpdgvtppqylofg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_K7mZjyDu2zfus4JpwqjwWg_0d2DLm0r';
-const SITIO_PUBLICO = 'https://rifa-diaria.vercel.app';
+const SITIO_PUBLICO = 'https://ganahoy-rifas.vercel.app';
 const REFRESCO_MS = 30000;
 
 const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -131,7 +131,7 @@ function mostrarIngreso(modo = 'entrar', mensaje = '') {
   const error = el('p', { class: 'error', hidden: !mensaje }, mensaje);
   const form = el('form', { class: 'ingreso', novalidate: true },
     el('h1', {}, crear ? 'Crear cuenta' : 'Entrar al panel'),
-    el('p', { class: 'ayuda' }, crear ? 'Solo una vez. Después alguien con acceso debe activarla.' : 'Solo para administradores de Winday.'),
+    el('p', { class: 'ayuda' }, crear ? 'Solo una vez. Después alguien con acceso debe activarla.' : 'Solo para administradores de GanaHoy.'),
     el('label', { class: 'campo' }, 'Correo', el('input', { name: 'correo', type: 'email', autocomplete: 'email', required: true })),
     el('label', { class: 'campo' }, 'Contraseña',
       el('input', { name: 'clave', type: 'password', autocomplete: crear ? 'new-password' : 'current-password', required: true, minlength: '8' })),

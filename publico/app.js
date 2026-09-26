@@ -6,7 +6,7 @@ const SUPABASE_URL = 'https://tpynlhzpdgvtppqylofg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_K7mZjyDu2zfus4JpwqjwWg_0d2DLm0r';
 const REFRESCO_MS = 20000;
 
-// Datos de pago de Winday y WhatsApp donde llegan los comprobantes.
+// Datos de pago de GanaHoy y WhatsApp donde llegan los comprobantes.
 const PAGO = {
   nequi: '3117241764',
   llave: '3117241764',
@@ -113,7 +113,7 @@ function datosRifa(r, cuantosDisponibles, idConteo) {
 
 async function mostrarLista(tipo = null) {
   const nombreTipo = tipo ? `Rifa de ${tipo} cifras` : 'Rifas de hoy';
-  document.title = tipo ? `${nombreTipo} · Winday` : 'Winday';
+  document.title = tipo ? `${nombreTipo} · GanaHoy` : 'GanaHoy';
   carrito.hidden = true;
   let rifas;
   try {
@@ -186,7 +186,7 @@ async function mostrarRifa(slug) {
     app.replaceChildren(el('p', { class: 'vacio' }, 'Esta rifa no existe. ', el('a', { href: '/' }, 'Ver rifas abiertas')));
     return;
   }
-  document.title = `${rifa.titulo} · Winday`;
+  document.title = `${rifa.titulo} · GanaHoy`;
   dibujarRifa();
   clearInterval(refresco);
   refresco = setInterval(async () => {
@@ -415,7 +415,7 @@ function mostrarListo(r, datos) {
   document.getElementById('listo-numeros').replaceChildren(...r.numeros.map((n) => el('span', {}, n)));
   document.getElementById('listo-total').textContent = `Total a pagar: ${pesos.format(r.total)}`;
 
-  // Mensaje que la persona le manda a Winday por WhatsApp junto con su comprobante.
+  // Mensaje que la persona le manda a GanaHoy por WhatsApp junto con su comprobante.
   const mensaje = [
     '¡Perfecto! Mis números quedaron separados ✅',
     '',

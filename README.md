@@ -1,11 +1,11 @@
-# Winday — rifas diarias
+# GanaHoy — rifas diarias
 
 Dos sitios estáticos (HTML + JS, sin compilación) en el mismo repositorio, cada uno con su proyecto de Vercel:
 
 | Carpeta    | Proyecto Vercel | Para qué |
 |------------|-----------------|----------|
-| `publico/` | `rifa-diaria`   | Página que se manda al grupo: `/2cifras`, `/3cifras` (y `/r/<slug>`). Ver números y separarlos. |
-| `admin/`   | `winday-admin`  | Panel: clientes, abonos, registrar boletas, crear rifas, cerrar y reiniciar, historial. |
+| `publico/` | `rifa-diaria` (ganahoy-rifas.vercel.app) | Página que se manda al grupo: `/2cifras`, `/3cifras` (y `/r/<slug>`). Ver números y separarlos. |
+| `admin/`   | `winday-admin` (ganahoy-admin.vercel.app) | Panel: clientes, abonos, registrar boletas, crear rifas, cerrar y reiniciar, historial. |
 
 Cada push a `main` publica los dos.
 

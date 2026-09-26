@@ -1,20 +1,20 @@
-/* Winday — fondo verde claro sacado del lima del logo; siempre claro
+/* GanaHoy — fondo verde claro sacado del verde del logo; siempre claro
    (sin modo oscuro, a pedido de Juan: el fondo negro opacaba el logo). */
 :root {
-  --fondo: #f3f9e4;
+  --fondo: #f2f8f4;
   --superficie: #ffffff;
-  --suave: #e9f1d4;
-  --texto: #0e0e0e;
-  --texto-suave: #5f6752;
-  --texto-tenue: #9ba48b;
-  --borde: #dde6c6;
-  --lima: #c9f24d;
-  --lima-claro: #e8f8b4;
-  --oliva: #5b8216;
-  --tinta: #0e0e0e;
+  --suave: #e3efe7;
+  --texto: #1d2024;
+  --texto-suave: #5a6660;
+  --texto-tenue: #95a39b;
+  --borde: #d3e4d9;
+  --lima: #3dbd78;
+  --lima-claro: #d6f2e2;
+  --oliva: #1f8a4c;
+  --tinta: #2f3337;
   --tinta-texto: #ffffff;
   --error: #b42318;
-  --sombra: 0 12px 32px rgba(40, 60, 10, 0.12);
+  --sombra: 0 12px 32px rgba(20, 50, 35, 0.12);
   --radio: 16px;
   color-scheme: light;
 }
@@ -23,7 +23,7 @@
 html { -webkit-text-size-adjust: 100%; background: var(--fondo); }
 body {
   margin: 0;
-  background: linear-gradient(180deg, #e3f5b0 0, var(--fondo) 340px) no-repeat, var(--fondo);
+  background: linear-gradient(180deg, #d4f0df 0, var(--fondo) 340px) no-repeat, var(--fondo);
   color: var(--texto);
   font: 16px/1.5 "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -218,7 +218,7 @@ button { font-family: inherit; }
 }
 .num:hover:not(:disabled) { border-color: var(--texto-tenue); }
 .num:active:not(:disabled) { transform: scale(0.95); }
-.num[aria-pressed="true"] { background: var(--lima); border-color: var(--lima); color: #0e0e0e; }
+.num[aria-pressed="true"] { background: var(--lima); border-color: var(--lima); color: #10241a; }
 .num:disabled {
   background: transparent;
   border-style: dashed;
@@ -248,7 +248,7 @@ button { font-family: inherit; }
 .carrito-info { flex: 1; min-width: 0; display: flex; flex-direction: column; font-size: 0.9rem; line-height: 1.3; }
 .carrito-info span { opacity: 0.65; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .carrito .boton-suave { color: inherit; border-color: color-mix(in srgb, currentColor 25%, transparent); }
-.carrito .boton:not(.boton-suave) { background: var(--lima); color: #0e0e0e; }
+.carrito .boton:not(.boton-suave) { background: var(--lima); color: #10241a; }
 
 .boton {
   font: inherit;
@@ -302,7 +302,7 @@ button { font-family: inherit; }
   border-radius: 50%;
   display: grid; place-items: center;
   background: var(--lima);
-  color: #0e0e0e;
+  color: #10241a;
 }
 .listo-icono svg { width: 28px; height: 28px; }
 .listo p { color: var(--texto-suave); margin: 8px 0 0; }
@@ -342,7 +342,7 @@ button { font-family: inherit; }
   padding: 8px 12px;
   min-height: 38px;
   background: var(--lima);
-  color: #0e0e0e;
+  color: #10241a;
   cursor: pointer;
 }
 .boton-whatsapp {
