@@ -5,6 +5,13 @@
 const SUPABASE_URL = 'https://tpynlhzpdgvtppqylofg.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_K7mZjyDu2zfus4JpwqjwWg_0d2DLm0r';
 const REFRESCO_MS = 20000;
+
+// Datos de pago de Winday y WhatsApp donde llegan los comprobantes.
+const PAGO = {
+  nequi: '3117241764',
+  llave: '3117241764',
+  whatsapp: '573117241764',
+};
 const POR_CENTENA = 100;
 
 const app = document.getElementById('app');
@@ -403,11 +410,33 @@ function mostrarError(texto) {
 }
 
 function mostrarListo(r, datos) {
-  document.getElementById('listo-detalle').textContent = `${datos.nombre}, estos números quedaron a tu nombre en «${estado.rifa.titulo}»:`;
+  const rifa = estado.rifa;
+  document.getElementById('listo-detalle').textContent = `${datos.nombre}, estos números quedaron a tu nombre en «${rifa.titulo}»:`;
   document.getElementById('listo-numeros').replaceChildren(...r.numeros.map((n) => el('span', {}, n)));
   document.getElementById('listo-total').textContent = `Total a pagar: ${pesos.format(r.total)}`;
+
+  // Mensaje que la persona le manda a Winday por WhatsApp junto con su comprobante.
+  const mensaje = [
+    '¡Perfecto! Mis números quedaron separados ✅',
+    '',
+    `*${rifa.titulo}*${rifa.loteria ? ` · Lotería ${rifa.loteria}` : ''}`,
+    `Números: *${r.numeros.join(', ')}*`,
+    `Nombre: ${datos.nombre}`,
+    `Total: ${pesos.format(r.total)}`,
+    '',
+    'Te comparto mi comprobante de pago 👇',
+  ].join('\n');
+  document.getElementById('listo-whatsapp').href = `https://wa.me/${PAGO.whatsapp}?text=${encodeURIComponent(mensaje)}`;
   listo.showModal();
 }
+
+document.querySelectorAll('[data-pago]').forEach((n) => { n.textContent = PAGO[n.dataset.pago]; });
+document.querySelectorAll('[data-copiar]').forEach((b) => b.addEventListener('click', async () => {
+  const valor = PAGO[b.dataset.copiar];
+  try { await navigator.clipboard.writeText(valor); } catch { /* sin portapapeles: el número igual está a la vista */ }
+  b.textContent = 'Copiado';
+  setTimeout(() => { b.textContent = 'Copiar'; }, 2000);
+}));
 
 document.getElementById('listo-cerrar').addEventListener('click', () => listo.close());
 
