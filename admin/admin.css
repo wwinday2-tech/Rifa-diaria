@@ -1,4 +1,5 @@
-/* Winday Admin — misma paleta que la página pública (verde claro, sin modo oscuro). */
+/* Winday Admin — misma paleta que la página pública (verde claro, sin modo oscuro).
+   Diseño centrado y de una sola columna, como pidió Juan: sencillo de usar en el celular. */
 :root {
   --fondo: #f3f9e4;
   --superficie: #ffffff;
@@ -24,47 +25,54 @@
 html { -webkit-text-size-adjust: 100%; background: var(--fondo); }
 body {
   margin: 0;
-  background: linear-gradient(180deg, #e3f5b0 0, var(--fondo) 260px) no-repeat, var(--fondo);
+  background: linear-gradient(180deg, #e3f5b0 0, var(--fondo) 280px) no-repeat, var(--fondo);
   color: var(--texto);
   font: 15px/1.5 "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   padding-bottom: 48px;
+  text-align: center;
 }
 a { color: inherit; }
 h1, h2, h3 { line-height: 1.2; margin: 0; letter-spacing: -0.02em; }
-h1 { font-size: 1.5rem; font-weight: 800; }
+h1 { font-size: 1.6rem; font-weight: 800; }
 h2 { font-size: 1.15rem; font-weight: 800; }
 h3 { font-size: 1rem; font-weight: 700; }
+p { margin: 0; }
 button, input, select { font: inherit; }
 :focus-visible { outline: 2px solid var(--oliva); outline-offset: 2px; }
 [hidden] { display: none !important; }
+.centro { display: flex; justify-content: center; }
 
 /* ---------- Encabezado ---------- */
 .barra {
-  max-width: 960px;
+  position: relative;
+  max-width: 640px;
   margin: 0 auto;
-  padding: 14px 16px;
-  padding-top: max(14px, env(safe-area-inset-top));
+  padding: 18px 16px 10px;
+  padding-top: max(18px, env(safe-area-inset-top));
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
-.marca { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 1.25rem; letter-spacing: -0.03em; }
-.marca img { width: 36px; height: 36px; display: block; }
+.marca { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.03em; }
+.marca img { width: 38px; height: 38px; display: block; }
 .marca span { color: var(--oliva); }
-.marca small { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--texto-suave); margin-left: 4px; }
-.enlace { background: none; border: 0; color: var(--texto-suave); font-weight: 600; cursor: pointer; padding: 8px; }
+.marca small { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--texto-suave); margin-left: 2px; }
+#salir { position: absolute; right: 8px; top: 50%; transform: translateY(-40%); }
+.enlace { background: none; border: 0; color: var(--texto-suave); font-weight: 600; cursor: pointer; padding: 8px 10px; text-decoration: underline; text-decoration-color: var(--borde); text-underline-offset: 4px; }
+.enlace:hover { color: var(--texto); }
+.enlace-fuerte { color: var(--texto); font-weight: 700; }
+#salir { text-decoration: none; }
 
-.contenido { max-width: 960px; margin: 0 auto; padding: 4px 16px 16px; }
-.vacio { color: var(--texto-suave); text-align: center; padding: 40px 0; }
+.contenido { max-width: 640px; margin: 0 auto; padding: 4px 16px 16px; }
+.vacio { color: var(--texto-suave); padding: 40px 0; }
 
 /* ---------- Botones y campos ---------- */
 .boton {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   font-weight: 700;
-  padding: 10px 16px;
-  min-height: 42px;
-  border-radius: 12px;
+  padding: 10px 18px;
+  min-height: 46px;
+  border-radius: 14px;
   border: 1px solid var(--tinta);
   background: var(--tinta);
   color: var(--tinta-texto);
@@ -75,105 +83,119 @@ button, input, select { font: inherit; }
 .boton:disabled { opacity: 0.55; cursor: wait; }
 .boton-lima { background: var(--lima); border-color: var(--lima); color: #0e0e0e; }
 .boton-suave { background: var(--superficie); color: var(--texto); border-color: var(--borde); font-weight: 600; }
-.boton-peligro { background: var(--superficie); color: var(--error); border-color: #f3c7c2; font-weight: 700; }
-.boton-chico { min-height: 34px; padding: 6px 12px; font-size: 0.85rem; border-radius: 10px; }
+.boton-ancho { width: 100%; max-width: 360px; }
 
 .campo { display: block; font-size: 0.8rem; font-weight: 600; color: var(--texto-suave); margin-top: 12px; }
+.campo input, .campo select { text-align: center; text-align-last: center; }
 .campo input, .campo select, .buscar {
   display: block;
   width: 100%;
   margin-top: 5px;
   font-size: 1rem;
   color: var(--texto);
-  padding: 11px 13px;
+  padding: 12px 14px;
   border: 1px solid transparent;
   border-radius: 12px;
   background: var(--suave);
 }
 .campo input:focus, .campo select:focus, .buscar:focus { outline: none; border-color: var(--texto-tenue); background: var(--superficie); }
 .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.check { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-weight: 600; font-size: 0.9rem; cursor: pointer; }
+.check { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px; font-weight: 600; font-size: 0.95rem; cursor: pointer; }
 .check input { width: 18px; height: 18px; accent-color: var(--oliva); }
-.ayuda { color: var(--texto-suave); font-size: 0.85rem; margin: 6px 0 0; }
-.error { color: var(--error); font-size: 0.9rem; margin: 12px 0 0; }
+.ayuda { color: var(--texto-suave); font-size: 0.85rem; margin-top: 8px; }
+.error { color: var(--error); font-size: 0.9rem; margin-top: 12px; }
 
 /* ---------- Ingreso ---------- */
 .ingreso {
   max-width: 380px;
-  margin: 32px auto 0;
+  margin: 28px auto 0;
   background: var(--superficie);
   border: 1px solid var(--borde);
   border-radius: 22px;
-  padding: 24px;
+  padding: 26px 22px;
 }
-.ingreso h1 { text-align: center; }
-.ingreso .ayuda { text-align: center; }
+.ingreso .ayuda { margin-bottom: 4px; }
 .ingreso .boton { width: 100%; margin-top: 18px; }
-.ingreso .enlace { display: block; margin: 10px auto 0; }
+.ingreso .enlace { display: block; margin: 12px auto 0; }
 
 /* ---------- Selector de rifas ---------- */
-.rifas-nav { display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px 16px; padding: 2px 16px 6px; scrollbar-width: none; }
+.rifas-nav {
+  display: flex;
+  justify-content: safe center;
+  gap: 6px;
+  overflow-x: auto;
+  margin: 4px -16px 22px;
+  padding: 2px 16px 6px;
+  scrollbar-width: none;
+}
 .rifas-nav::-webkit-scrollbar { display: none; }
 .pestana {
   flex: none;
-  display: flex; flex-direction: column; align-items: flex-start;
-  text-align: left;
-  padding: 8px 14px;
-  border-radius: 14px;
+  padding: 8px 16px;
+  border-radius: 999px;
   border: 1px solid var(--borde);
   background: var(--superficie);
   color: var(--texto);
   cursor: pointer;
-  line-height: 1.25;
+  font-weight: 700;
+  font-size: 0.88rem;
+  line-height: 1.2;
 }
-.pestana strong { font-size: 0.9rem; }
-.pestana small { font-size: 0.75rem; color: var(--texto-suave); }
+.pestana small { display: block; font-size: 0.7rem; font-weight: 500; color: var(--texto-suave); }
 .pestana[aria-pressed="true"] { background: var(--tinta); border-color: var(--tinta); color: var(--tinta-texto); }
 .pestana[aria-pressed="true"] small { color: #c9cfbd; }
-.pestana-nueva { justify-content: center; align-items: center; border-style: dashed; font-weight: 700; font-size: 0.9rem; color: var(--oliva); }
+.pestana-nueva { border-style: dashed; color: var(--oliva); background: transparent; }
 
 /* ---------- Cabecera de la rifa ---------- */
-.rifa-cab { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
-.rifa-cab p { margin: 2px 0 0; color: var(--texto-suave); font-size: 0.9rem; }
-.rifa-cab .loteria { color: var(--oliva); font-weight: 700; }
-.acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.rifa-cab { margin-bottom: 18px; }
+.rifa-cab h1 { margin-top: 8px; }
+.rifa-cab p { color: var(--texto-suave); font-size: 0.92rem; margin-top: 2px; }
+.rifa-cab .loteria { color: var(--oliva); font-weight: 700; font-size: 1rem; }
+.ganador-linea { display: inline-block; margin-top: 8px !important; background: var(--lima); color: #0e0e0e !important; font-weight: 700; border-radius: 999px; padding: 4px 12px; }
+.acciones { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-bottom: 22px; }
+.acciones-sec { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 6px; }
 .insignia {
   display: inline-block;
   font-size: 0.75rem;
   font-weight: 700;
-  padding: 2px 9px;
+  padding: 3px 10px;
   border-radius: 999px;
   background: var(--suave);
   color: var(--texto-suave);
-  vertical-align: middle;
 }
 .insignia-abierta { background: var(--lima-claro); color: #3c550c; }
 .insignia-debe { background: var(--debe-fondo); color: var(--debe); }
 .insignia-pago { background: var(--lima-claro); color: #3c550c; }
 .insignia-favor { background: #e0ecff; color: #1d4ed8; }
 
-/* ---------- Tarjetas de totales ---------- */
-.totales { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
-.total { background: var(--superficie); border: 1px solid var(--borde); border-radius: 14px; padding: 12px 14px; min-width: 0; }
-.total small { display: block; color: var(--texto-suave); font-size: 0.78rem; font-weight: 600; }
-.total strong { display: block; font-size: 1.25rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-.total span { display: block; color: var(--texto-suave); font-size: 0.78rem; }
-.total-lima { background: var(--lima-claro); border-color: transparent; }
+/* ---------- Totales ---------- */
+.totales { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 22px; }
+.total { background: var(--superficie); border: 1px solid var(--borde); border-radius: 16px; padding: 14px 10px; min-width: 0; }
+.total small { display: block; color: var(--texto-suave); font-size: 0.8rem; font-weight: 600; }
+.total strong { display: block; font-size: 1.35rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
 .total-debe strong { color: var(--debe); }
-.barra-progreso { height: 6px; border-radius: 999px; background: var(--suave); margin-top: 8px; overflow: hidden; }
+.ocupacion { grid-column: 1 / -1; padding: 4px 8px 0; }
+.ocupacion p { color: var(--texto-suave); font-size: 0.85rem; margin-top: 6px; }
+.barra-progreso { height: 6px; border-radius: 999px; background: var(--suave); overflow: hidden; }
 .barra-progreso i { display: block; height: 100%; background: var(--oliva); border-radius: inherit; }
 
-/* ---------- Pestañas de vista y filtros ---------- */
-.vistas { display: inline-flex; padding: 4px; gap: 4px; background: var(--suave); border-radius: 14px; margin-bottom: 12px; }
-.vista { border: 0; background: transparent; padding: 8px 16px; border-radius: 10px; font-weight: 700; color: var(--texto-suave); cursor: pointer; }
+/* ---------- Vistas y filtros ---------- */
+.vistas { display: inline-flex; padding: 4px; gap: 4px; background: var(--suave); border-radius: 14px; margin-bottom: 14px; }
+.vista { border: 0; background: transparent; padding: 8px 20px; border-radius: 10px; font-weight: 700; color: var(--texto-suave); cursor: pointer; }
 .vista[aria-pressed="true"] { background: var(--superficie); color: var(--texto); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); }
-.filtros { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
-.filtros .buscar { flex: 1 1 100%; width: auto; margin: 0; background: var(--superficie) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ba48b' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 12px center / 18px; padding-left: 38px; border-color: var(--borde); }
+.filtros { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 14px; }
+.filtros .buscar {
+  flex: 1 1 100%;
+  margin: 0;
+  text-align: center;
+  background: var(--superficie);
+  border-color: var(--borde);
+}
 .chip {
   border: 1px solid var(--borde);
   background: var(--superficie);
   border-radius: 999px;
-  padding: 7px 13px;
+  padding: 7px 14px;
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
@@ -181,52 +203,53 @@ button, input, select { font: inherit; }
 }
 .chip[aria-pressed="true"] { background: var(--tinta); border-color: var(--tinta); color: var(--tinta-texto); }
 
-/* ---------- Clientes ---------- */
-.clientes { display: grid; gap: 8px; }
+/* ---------- Clientes e historial ---------- */
+.clientes, .historial { display: grid; gap: 8px; }
 .cliente {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   width: 100%;
-  text-align: left;
   background: var(--superficie);
   border: 1px solid var(--borde);
-  border-radius: 14px;
-  padding: 12px 14px;
+  border-radius: 16px;
+  padding: 14px;
   cursor: pointer;
   color: inherit;
+  text-align: center;
 }
 .cliente:hover { border-color: var(--texto-tenue); }
-.cliente-arriba { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-.cliente-arriba h3 { overflow-wrap: anywhere; }
-.cliente-arriba p { margin: 0; color: var(--texto-suave); font-size: 0.82rem; }
-.numeros { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
+.cliente h3 { overflow-wrap: anywhere; }
+.cliente-sub { color: var(--texto-suave); font-size: 0.82rem; }
+.numeros { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin: 6px 0; }
 .numeros span, .numeros button {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
   font-size: 0.85rem;
   background: var(--suave);
   border-radius: 8px;
-  padding: 3px 8px;
+  padding: 3px 9px;
   border: 0;
   color: var(--texto);
 }
 .numeros .ganador { background: var(--lima); }
-.cuentas { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.82rem; color: var(--texto-suave); }
-.cuentas b { color: var(--texto); font-variant-numeric: tabular-nums; }
 
 /* ---------- Cuadrícula de números ---------- */
-.leyenda { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.8rem; color: var(--texto-suave); margin-bottom: 10px; }
+.leyenda { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; font-size: 0.8rem; color: var(--texto-suave); margin-bottom: 12px; }
 .leyenda span { display: inline-flex; align-items: center; gap: 6px; }
 .leyenda span::before { content: ""; width: 12px; height: 12px; border-radius: 4px; border: 1px solid var(--borde); background: var(--superficie); }
 .leyenda .l-separado::before { background: var(--debe-fondo); border-color: #f1c98f; }
 .leyenda .l-pagado::before { background: var(--lima); border-color: var(--lima); }
-.centenas { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; scrollbar-width: none; }
+.centenas { display: flex; justify-content: safe center; gap: 6px; overflow-x: auto; margin: 0 -16px 12px; padding: 0 16px; scrollbar-width: none; }
+.centenas::-webkit-scrollbar { display: none; }
 .centena { flex: none; border: 0; border-radius: 999px; padding: 6px 11px; background: var(--suave); color: var(--texto-suave); font-weight: 600; font-size: 0.8rem; cursor: pointer; font-variant-numeric: tabular-nums; }
 .centena[aria-pressed="true"] { background: var(--tinta); color: var(--tinta-texto); }
-.cuadricula { display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 6px; }
+.cuadricula { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
 .num {
   aspect-ratio: 1;
-  min-height: 40px;
-  border-radius: 10px;
+  min-height: 44px;
+  border-radius: 12px;
   border: 1px solid var(--borde);
   background: var(--superficie);
   font-weight: 700;
@@ -239,25 +262,22 @@ button, input, select { font: inherit; }
 .num-pagado { background: var(--lima); border-color: var(--lima); }
 .num-ganador { outline: 3px solid var(--tinta); outline-offset: 1px; }
 
-/* ---------- Historial ---------- */
-.historial { display: grid; gap: 8px; }
-.historial .cliente strong { font-variant-numeric: tabular-nums; }
-
 /* ---------- Ventana ---------- */
 .ventana {
-  width: min(460px, calc(100% - 24px));
+  width: min(440px, calc(100% - 24px));
   max-height: calc(100dvh - 24px);
   border: 0;
   border-radius: 22px;
-  padding: 22px;
+  padding: 24px 20px 20px;
   background: var(--superficie);
   color: var(--texto);
   box-shadow: var(--sombra);
+  text-align: center;
 }
 .ventana::backdrop { background: rgba(14, 14, 14, 0.4); backdrop-filter: blur(2px); }
-.ventana-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-.ventana-cab p { margin: 2px 0 0; color: var(--texto-suave); font-size: 0.88rem; }
-.cerrar { border: 0; background: var(--suave); width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; line-height: 1; flex: none; }
+.ventana-cab { position: relative; padding: 0 36px; }
+.ventana-cab p { margin-top: 2px; color: var(--texto-suave); font-size: 0.88rem; }
+.cerrar { position: absolute; right: -6px; top: -8px; border: 0; background: var(--suave); width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; line-height: 1; }
 .ventana .pie { display: flex; gap: 8px; margin-top: 18px; }
 .ventana .pie .boton { flex: 1; }
 .seccion { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--borde); }
@@ -266,17 +286,18 @@ button, input, select { font: inherit; }
 .numeros .liberar::after { content: "×"; color: var(--texto-tenue); font-weight: 800; }
 .numeros .liberar:hover { background: var(--error-fondo); color: var(--error); }
 .abonos { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-.abonos li { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: var(--fondo); border-radius: 10px; padding: 8px 10px; font-size: 0.88rem; }
+.abonos li { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: var(--fondo); border-radius: 10px; padding: 8px 12px; font-size: 0.88rem; text-align: left; }
 .abonos li small { display: block; color: var(--texto-suave); font-size: 0.78rem; }
 .abonos .quitar { border: 0; background: none; color: var(--texto-tenue); cursor: pointer; font-size: 1.1rem; padding: 4px 6px; }
 .abonos .quitar:hover { color: var(--error); }
-.saldo-grande { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 14px; text-align: center; }
-.saldo-grande div { background: var(--fondo); border-radius: 12px; padding: 8px 4px; }
+.saldo-grande { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 16px; }
+.saldo-grande div { background: var(--fondo); border-radius: 12px; padding: 10px 4px; }
 .saldo-grande small { display: block; font-size: 0.72rem; color: var(--texto-suave); font-weight: 600; }
 .saldo-grande strong { font-variant-numeric: tabular-nums; }
 .saldo-grande .debe strong { color: var(--debe); }
 .abonar { display: flex; gap: 8px; align-items: flex-end; }
 .abonar .campo { flex: 1; margin-top: 0; }
+.abonar .campo input { text-align: center; font-weight: 700; font-size: 1.1rem; }
 .aviso-ganador { background: var(--lima-claro); border-radius: 12px; padding: 10px 12px; margin-top: 12px; font-size: 0.9rem; }
 
 .toast {
@@ -295,8 +316,6 @@ button, input, select { font: inherit; }
   font-weight: 600;
 }
 
-@media (min-width: 720px) {
-  .totales { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .clientes { grid-template-columns: 1fr 1fr; }
+@media (min-width: 560px) {
   .cuadricula { grid-template-columns: repeat(10, minmax(0, 1fr)); }
 }

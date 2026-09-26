@@ -246,8 +246,7 @@ async function mostrarPanel() {
     el('button', {
       class: 'pestana', type: 'button', 'aria-pressed': String(estado.verHistorial),
       onclick: () => { estado.verHistorial = true; mostrarPanel(); },
-    }, el('strong', {}, 'Historial'), el('small', {}, 'Rifas cerradas')),
-    el('button', { class: 'pestana pestana-nueva', type: 'button', onclick: () => ventanaRifa(null) }, '+ Nueva rifa'),
+    }, el('strong', {}, 'Historial'), el('small', {}, 'Cerradas')),
   );
 
   if (estado.verHistorial) {
@@ -256,7 +255,8 @@ async function mostrarPanel() {
   }
   const r = rifaActual();
   if (!r) {
-    app.replaceChildren(nav, el('p', { class: 'vacio' }, 'No hay rifas abiertas. Crea una con «+ Nueva rifa».'));
+    app.replaceChildren(nav, el('p', { class: 'vacio' }, 'No hay rifas abiertas.'),
+      el('button', { class: 'boton boton-lima boton-ancho', type: 'button', onclick: () => ventanaRifa(null) }, '+ Nueva rifa'));
     return;
   }
   await cargarRifa();
@@ -280,35 +280,36 @@ function vistaRifa(r) {
   const porcentaje = Math.round((t.vendidos / t.capacidad) * 100);
 
   const cab = el('section', { class: 'rifa-cab' },
-    el('div', {},
-      el('h1', {}, nombreRifa(r), ' ', el('span', { class: `insignia ${abierta ? 'insignia-abierta' : ''}` }, abierta ? 'Abierta' : 'Cerrada')),
-      el('p', {}, r.loteria && el('span', { class: 'loteria' }, `Lotería ${r.loteria}`), r.loteria && ' · ',
-        r.fecha_sorteo ? `Juega el ${fechaLarga.format(new Date(r.fecha_sorteo))}` : 'Sin fecha de sorteo'),
-      el('p', {}, `Valor ${pesos.format(r.precio)}`, r.premio && ` · Premio ${r.premio}`,
-        r.numero_ganador && ` · Ganador: ${r.numero_ganador}${r.ganador_nombre ? ` (${r.ganador_nombre})` : ' (nadie lo tenía)'}`),
-    ),
-    el('div', { class: 'acciones' },
-      abierta && el('button', { class: 'boton boton-lima', type: 'button', onclick: () => ventanaRegistrar() }, '+ Registrar boleta'),
+    el('span', { class: `insignia ${abierta ? 'insignia-abierta' : ''}` }, abierta ? 'Abierta' : 'Cerrada'),
+    el('h1', {}, nombreRifa(r)),
+    r.loteria && el('p', { class: 'loteria' }, `Lotería ${r.loteria}`),
+    el('p', {}, r.fecha_sorteo ? `Juega el ${fechaLarga.format(new Date(r.fecha_sorteo))}` : 'Sin fecha de sorteo'),
+    el('p', {}, `Valor ${pesos.format(r.precio)}`, r.premio && ` · Premio ${r.premio}`),
+    r.numero_ganador && el('p', { class: 'ganador-linea' },
+      `Ganó el ${r.numero_ganador} · ${r.ganador_nombre || 'nadie lo tenía'}`),
+  );
+
+  const acciones = el('section', { class: 'acciones' },
+    abierta && el('button', { class: 'boton boton-lima boton-ancho', type: 'button', onclick: () => ventanaRegistrar() }, '+ Registrar boleta'),
+    el('div', { class: 'acciones-sec' },
       abierta && el('button', {
-        class: 'boton boton-suave', type: 'button',
+        class: 'enlace', type: 'button',
         onclick: async () => {
           try { await navigator.clipboard.writeText(enlacePublico(r)); toast('Enlace copiado'); } catch { toast(enlacePublico(r)); }
         },
       }, 'Copiar enlace'),
-      el('button', { class: 'boton boton-suave', type: 'button', onclick: () => ventanaRifa(r) }, 'Editar'),
-      abierta && el('button', { class: 'boton', type: 'button', onclick: () => ventanaReiniciar(r) }, 'Cerrar y reiniciar'),
+      el('button', { class: 'enlace', type: 'button', onclick: () => ventanaRifa(r) }, 'Editar'),
+      el('button', { class: 'enlace', type: 'button', onclick: () => ventanaRifa(null) }, 'Nueva rifa'),
+      abierta && el('button', { class: 'enlace enlace-fuerte', type: 'button', onclick: () => ventanaReiniciar(r) }, 'Cerrar y reiniciar'),
     ),
   );
 
   const totales = el('section', { class: 'totales' },
-    el('div', { class: 'total total-lima' }, el('small', {}, 'Recaudado'), el('strong', {}, pesos.format(t.recaudado)),
-      el('span', {}, `${t.numerosPagos} números pagos`)),
-    el('div', { class: 'total total-debe' }, el('small', {}, 'Por cobrar'), el('strong', {}, pesos.format(t.porCobrar)),
-      el('span', {}, t.deben === 1 ? '1 cliente debe' : `${t.deben} clientes deben`)),
-    el('div', { class: 'total' }, el('small', {}, 'Números ocupados'), el('strong', {}, `${t.vendidos} / ${t.capacidad}`),
-      el('div', { class: 'barra-progreso' }, el('i', { style: `width:${porcentaje}%` }))),
-    el('div', { class: 'total' }, el('small', {}, 'Libres'), el('strong', {}, String(t.capacidad - t.vendidos)),
-      el('span', {}, t.clientes === 1 ? '1 cliente' : `${t.clientes} clientes`)),
+    el('div', { class: 'total' }, el('small', {}, 'Recaudado'), el('strong', {}, pesos.format(t.recaudado))),
+    el('div', { class: 'total total-debe' }, el('small', {}, 'Por cobrar'), el('strong', {}, pesos.format(t.porCobrar))),
+    el('div', { class: 'ocupacion' },
+      el('div', { class: 'barra-progreso' }, el('i', { style: `width:${porcentaje}%` })),
+      el('p', {}, `${t.vendidos} de ${t.capacidad} números ocupados · ${t.capacidad - t.vendidos} libres`)),
   );
 
   const vistas = el('div', { class: 'vistas', role: 'group' },
@@ -317,7 +318,8 @@ function vistaRifa(r) {
       onclick: () => { estado.vista = v; mostrarPanel(); },
     }, v === 'clientes' ? 'Clientes' : 'Números')));
 
-  return el('div', {}, cab, totales, vistas, estado.vista === 'clientes' ? vistaClientes(r) : vistaNumeros(r));
+  return el('div', {}, cab, acciones, totales, el('div', { class: 'centro' }, vistas),
+    estado.vista === 'clientes' ? vistaClientes(r) : vistaNumeros(r));
 }
 
 /* ---------- Clientes ---------- */
@@ -364,15 +366,11 @@ function vistaClientes(r) {
     lista.replaceChildren(...clientes.map((c) => {
       const est = estadoCliente(c);
       return el('button', { class: 'cliente', type: 'button', onclick: () => ventanaCliente(c.whatsapp) },
-        el('div', { class: 'cliente-arriba' },
-          el('div', {}, el('h3', {}, c.nombre || 'Sin números'),
-            el('p', {}, [c.ciudad, telefonoBonito(c.whatsapp)].filter(Boolean).join(' · '))),
-          el('span', { class: `insignia ${est.clase}` }, est.texto)),
+        el('h3', {}, c.nombre || 'Sin números'),
+        el('p', { class: 'cliente-sub' }, [c.ciudad, telefonoBonito(c.whatsapp)].filter(Boolean).join(' · ')),
         c.numeros.length > 0 && el('div', { class: 'numeros' },
           c.numeros.map((n) => el('span', { class: n === r.numero_ganador ? 'ganador' : '' }, n))),
-        el('div', { class: 'cuentas' },
-          el('span', {}, 'Total ', el('b', {}, pesos.format(c.total))),
-          el('span', {}, 'Abonado ', el('b', {}, pesos.format(c.abonado)))),
+        el('span', { class: `insignia ${est.clase}` }, est.texto),
       );
     }));
   }
@@ -679,14 +677,11 @@ function vistaHistorial() {
     class: 'cliente', type: 'button',
     onclick: () => { estado.verHistorial = false; estado.rifaId = r.id; estado.vista = 'clientes'; mostrarPanelCerrada(); },
   },
-  el('div', { class: 'cliente-arriba' },
-    el('div', {}, el('h3', {}, nombreRifa(r)),
-      el('p', {}, [r.loteria && `Lotería ${r.loteria}`, r.fecha_sorteo && fechaLarga.format(new Date(r.fecha_sorteo))].filter(Boolean).join(' · '))),
-    el('span', { class: 'insignia insignia-abierta' }, r.numero_ganador ? `Ganó ${r.numero_ganador}` : 'Sin ganador')),
-  el('div', { class: 'cuentas', style: 'margin-top:8px' },
-    el('span', {}, 'Ganador ', el('b', {}, r.numero_ganador ? (r.ganador_nombre || 'nadie lo tenía') : '—')),
-    el('span', {}, 'Vendidos ', el('b', {}, String(r.vendidos))),
-    el('span', {}, 'Recaudado ', el('b', {}, pesos.format(r.recaudado)))),
+  el('h3', {}, nombreRifa(r)),
+  el('p', { class: 'cliente-sub' }, [r.loteria && `Lotería ${r.loteria}`, r.fecha_sorteo && fechaLarga.format(new Date(r.fecha_sorteo))].filter(Boolean).join(' · ')),
+  el('span', { class: 'insignia insignia-abierta' },
+    r.numero_ganador ? `Ganó el ${r.numero_ganador} · ${r.ganador_nombre || 'nadie lo tenía'}` : 'Sin ganador'),
+  el('p', { class: 'cliente-sub' }, `${r.vendidos} números vendidos · ${pesos.format(r.recaudado)} recaudado`),
   )));
 }
 
@@ -695,9 +690,9 @@ function vistaHistorial() {
 async function mostrarPanelCerrada() {
   const r = rifaActual();
   await cargarRifa();
-  const volver = el('button', { class: 'boton boton-suave boton-chico', type: 'button', style: 'margin-bottom:12px',
+  const volver = el('button', { class: 'enlace', type: 'button',
     onclick: () => { estado.verHistorial = true; mostrarPanel(); } }, '← Volver al historial');
-  app.replaceChildren(volver, vistaRifa(r));
+  app.replaceChildren(el('div', { class: 'centro' }, volver), vistaRifa(r));
 }
 
 /* ---------- Arranque ---------- */
