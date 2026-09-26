@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>GanaHoy</title>
   <meta name="description" content="Mira los números disponibles y separa el tuyo.">
+  <!-- Vista previa cuando el enlace se comparte por WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="GanaHoy">
+  <meta property="og:title" content="GanaHoy · Rifas diarias">
+  <meta property="og:description" content="Mira los números disponibles y separa el tuyo.">
+  <meta property="og:image" content="https://ganahoy-rifas.vercel.app/og.png">
+  <meta property="og:image:width" content="600">
+  <meta property="og:image:height" content="600">
+  <meta name="apple-mobile-web-app-title" content="GanaHoy">
   <meta name="theme-color" content="#d4f0df">
   <meta name="color-scheme" content="light only">
   <link rel="icon" href="/icono.png" type="image/png">
@@ -32,7 +41,7 @@
       <strong id="carrito-cuenta">0 números</strong>
       <span id="carrito-total"></span>
     </div>
-    <button id="carrito-limpiar" class="boton boton-suave" type="button">Quitar</button>
+    <button id="carrito-limpiar" class="boton boton-suave boton-x" type="button" aria-label="Quitar los números elegidos" title="Quitar">✕</button>
     <button id="carrito-separar" class="boton" type="button">Separar</button>
   </div>
 

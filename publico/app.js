@@ -22,7 +22,15 @@ const formError = document.getElementById('form-error');
 const listo = document.getElementById('listo');
 
 const pesos = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
-const fecha = new Intl.DateTimeFormat('es-CO', { weekday: 'long', day: 'numeric', month: 'long', hour: 'numeric', minute: '2-digit', timeZone: 'America/Bogota' });
+const fechaDia = new Intl.DateTimeFormat('es-CO', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'America/Bogota' });
+const fechaHora = new Intl.DateTimeFormat('es-CO', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Bogota' });
+
+// «sábado, 26 de septiembre · 7:00 p. m.»; la hora con espacios que no se parten,
+// para que en el celular no quede «7:00 p.» en una línea y «m.» en la otra.
+function textoFecha(iso) {
+  const d = new Date(iso);
+  return `${fechaDia.format(d)} · ${fechaHora.format(d).replace(/\s/g, ' ')}`;
+}
 
 const ERRORES = {
   rifa_no_existe: 'Esta rifa ya no existe.',
@@ -105,7 +113,7 @@ function datosRifa(r, cuantosDisponibles, idConteo) {
       el('div', { class: 'cifra' }, el('small', {}, 'Valor'), el('strong', {}, pesos.format(r.precio))),
       el('div', { class: 'cifra' }, el('small', {}, 'Disponibles'), el('strong', { id: idConteo }, String(cuantosDisponibles))),
     ),
-    r.fecha_sorteo && el('p', { class: 'fecha' }, `Juega el ${fecha.format(new Date(r.fecha_sorteo))}`),
+    r.fecha_sorteo && el('p', { class: 'fecha' }, `Juega el ${textoFecha(r.fecha_sorteo)}`),
   ];
 }
 

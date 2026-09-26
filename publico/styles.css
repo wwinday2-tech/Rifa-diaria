@@ -96,10 +96,11 @@ button { font-family: inherit; }
 .cifra small { display: block; color: var(--texto-suave); font-size: 0.75rem; font-weight: 500; }
 .cifra strong {
   display: block;
-  font-size: 1.05rem;
+  /* Se achica en teléfonos angostos para que «$500.000» no se parta en dos líneas. */
+  font-size: clamp(0.88rem, 4.2vw, 1.05rem);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  overflow-wrap: anywhere;
+  word-break: keep-all;
   line-height: 1.25;
 }
 .tarjeta .cifra strong { font-size: 0.95rem; }
@@ -133,12 +134,12 @@ button { font-family: inherit; }
 .tarjeta .cifra-destacada { background: var(--lima-claro); }
 
 /* ---------- Herramientas ---------- */
-.herramientas { display: flex; gap: 8px; margin-bottom: 12px; }
+.herramientas { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
 .buscar {
   flex: 1 1 auto;
   min-width: 0;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 16px; /* con menos de 16px el iPhone acerca la pantalla al tocarlo */
   padding: 10px 14px 10px 38px;
   min-height: 44px;
   border: 1px solid var(--borde);
@@ -178,7 +179,8 @@ button { font-family: inherit; }
   font-size: 0.85rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  padding: 7px 12px;
+  padding: 0 14px;
+  min-height: 40px;
   border-radius: 999px;
   border: 0;
   background: var(--suave);
@@ -428,6 +430,30 @@ button { font-family: inherit; }
   z-index: 10;
   font-size: 0.9rem;
   font-weight: 600;
+}
+
+/* ---------- Teléfono (casi todos entran desde WhatsApp) ---------- */
+.boton-x { width: 44px; padding: 0; flex: none; font-size: 1rem; }
+.carrito-info strong { white-space: nowrap; }
+#form-separar h2, #form-separar .elegidos { text-align: center; }
+button, a, input { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.leyenda { justify-content: center; }
+.pago-fila small { white-space: nowrap; }
+@media (max-width: 379px) {
+  /* Teléfonos pequeños: menos margen para que el número de pago y «Copiar» quepan. */
+  .ventana { width: calc(100% - 16px); padding: 20px 14px; }
+  .pago { padding: 8px; }
+  .pago-fila { padding: 6px; gap: 6px; }
+  .pago-logo { width: 44px; }
+  .pago-logo img { max-width: 36px; }
+  .copiar { padding: 8px; }
+}
+@media (max-width: 479px) {
+  /* Buscador a lo ancho y los dos botones debajo, mitad y mitad. */
+  .buscar { flex-basis: 100%; }
+  .herramientas .chip { flex: 1 1 0; }
+  .cifras { gap: 6px; }
+  .cifra { padding: 10px 6px; }
 }
 
 @media (min-width: 560px) {
