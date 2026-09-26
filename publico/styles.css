@@ -345,6 +345,19 @@ button { font-family: inherit; }
   color: #10241a;
   cursor: pointer;
 }
+.listo .metodo-titulo { color: var(--texto); font-weight: 800; font-size: 0.95rem; margin: 16px 0 8px; }
+.metodos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.metodo {
+  font: inherit;
+  font-weight: 700;
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--borde);
+  background: var(--superficie);
+  color: var(--texto);
+  cursor: pointer;
+}
+.metodo[aria-checked="true"] { background: var(--lima); border-color: var(--lima); color: #10241a; }
 .boton-whatsapp {
   display: flex;
   align-items: center;

@@ -10,7 +10,7 @@ const REFRESCO_MS = 20000;
 const PAGO = {
   nequi: '3117241764',
   llave: '3117241764',
-  whatsapp: '573117241764',
+  whatsapp: '573104485826', // WhatsApp de la rifa diaria: aquí llegan los comprobantes
 };
 const POR_CENTENA = 100;
 
@@ -415,20 +415,31 @@ function mostrarListo(r, datos) {
   document.getElementById('listo-numeros').replaceChildren(...r.numeros.map((n) => el('span', {}, n)));
   document.getElementById('listo-total').textContent = `Total a pagar: ${pesos.format(r.total)}`;
 
-  // Mensaje que la persona le manda a GanaHoy por WhatsApp junto con su comprobante.
+  ultimaSeparacion = { r, datos, rifa };
+  elegirMetodo(null);
+  listo.showModal();
+}
+
+// Mensaje que la persona le manda a GanaHoy por WhatsApp junto con su comprobante.
+let ultimaSeparacion = null;
+function elegirMetodo(metodo) {
+  document.querySelectorAll('[data-metodo]').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.metodo === metodo)));
+  if (!ultimaSeparacion) return;
+  const { r, datos, rifa } = ultimaSeparacion;
   const mensaje = [
-    '¡Perfecto! Mis números quedaron separados ✅',
+    'Hola, confirmo la separación de mis números ✅',
     '',
     `*${rifa.titulo}*${rifa.loteria ? ` · Lotería ${rifa.loteria}` : ''}`,
     `Números: *${r.numeros.join(', ')}*`,
     `Nombre: ${datos.nombre}`,
     `Total: ${pesos.format(r.total)}`,
+    `Método de pago: ${metodo || 'Nequi / Llave Bre-B'}`,
     '',
     'Te comparto mi comprobante de pago 👇',
   ].join('\n');
   document.getElementById('listo-whatsapp').href = `https://wa.me/${PAGO.whatsapp}?text=${encodeURIComponent(mensaje)}`;
-  listo.showModal();
 }
+document.querySelectorAll('[data-metodo]').forEach((b) => b.addEventListener('click', () => elegirMetodo(b.dataset.metodo)));
 
 document.querySelectorAll('[data-pago]').forEach((n) => { n.textContent = PAGO[n.dataset.pago]; });
 document.querySelectorAll('[data-copiar]').forEach((b) => b.addEventListener('click', async () => {
