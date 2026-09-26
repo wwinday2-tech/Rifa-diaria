@@ -300,6 +300,8 @@ function vistaRifa(r) {
       }, 'Copiar enlace'),
       el('button', { class: 'enlace', type: 'button', onclick: () => ventanaRifa(r) }, 'Editar'),
       el('button', { class: 'enlace', type: 'button', onclick: () => ventanaRifa(null) }, 'Nueva rifa'),
+      abierta && sinPago().length > 0 && el('button', { class: 'enlace enlace-peligro', type: 'button', onclick: () => ventanaLiberarSinPago(r) },
+        `Liberar sin pago (${sinPago().reduce((s, c) => s + c.cantidad, 0)})`),
       abierta && el('button', { class: 'enlace enlace-fuerte', type: 'button', onclick: () => ventanaReiniciar(r) }, 'Cerrar y reiniciar'),
     ),
   );
@@ -320,6 +322,41 @@ function vistaRifa(r) {
 
   return el('div', {}, cab, acciones, totales, el('div', { class: 'centro' }, vistas),
     estado.vista === 'clientes' ? vistaClientes(r) : vistaNumeros(r));
+}
+
+// Clientes que separaron y no han abonado nada (los que abonaron algo no se tocan).
+function sinPago() {
+  return estado.clientes.filter((c) => c.cantidad > 0 && c.abonado === 0);
+}
+
+function ventanaLiberarSinPago(r) {
+  const clientes = sinPago().sort((a, b) => (a.nombre || '').localeCompare(b.nombre || ''));
+  const numeros = clientes.reduce((s, c) => s + c.cantidad, 0);
+  const error = el('p', { class: 'error', hidden: true });
+  const boton = el('button', {
+    class: 'boton boton-peligro', type: 'button',
+    onclick: async () => {
+      boton.disabled = true;
+      try {
+        await ok(sb.from('boletas').delete().eq('rifa_id', r.id).in('whatsapp', clientes.map((c) => c.whatsapp)));
+        toast(numeros === 1 ? '1 número liberado' : `${numeros} números liberados`);
+        cerrarVentana();
+        await recargar();
+      } catch { error.textContent = 'No se pudieron liberar. Intenta de nuevo.'; error.hidden = false; boton.disabled = false; }
+    },
+  }, `Liberar ${numeros === 1 ? '1 número' : `${numeros} números`}`);
+  abrirVentana(
+    cabeceraVentana('Liberar sin pago', 'Quienes separaron y no han abonado nada'),
+    el('div', { class: 'clientes', style: 'margin-top:16px' }, clientes.map((c) => el('div', { class: 'cliente cliente-quieto' },
+      el('h3', {}, c.nombre || 'Sin nombre'),
+      el('p', { class: 'cliente-sub' }, [c.ciudad, telefonoBonito(c.whatsapp)].filter(Boolean).join(' · ')),
+      el('div', { class: 'numeros' }, c.numeros.map((n) => el('span', {}, n)))))),
+    el('p', { class: 'ayuda' }, 'Estos números vuelven a quedar disponibles en la página. Los clientes que abonaron algo no aparecen aquí.'),
+    error,
+    el('div', { class: 'pie' },
+      el('button', { class: 'boton boton-suave', type: 'button', onclick: cerrarVentana }, 'Cancelar'),
+      boton),
+  );
 }
 
 /* ---------- Clientes ---------- */
@@ -466,12 +503,14 @@ async function ventanaCliente(whatsapp) {
           ? el('button', { class: 'liberar', type: 'button', title: `Liberar ${n}`, onclick: () => liberar(n, whatsapp) }, n)
           : el('span', { class: n === r.numero_ganador ? 'ganador' : '' }, n)))
         : el('p', { class: 'ayuda' }, 'No tiene números.'),
-      abierta && el('p', { class: 'ayuda' }, 'Toca un número para liberarlo.'),
+      abierta && c.numeros.length > 0 && el('p', { class: 'ayuda' }, 'Toca un número para liberar solo ese.'),
       abierta && el('div', { class: 'pie' },
         el('button', {
           class: 'boton boton-suave', type: 'button',
           onclick: () => ventanaRegistrar({ nombre: c.nombre, whatsapp, ciudad: c.ciudad }),
-        }, '+ Agregar números')),
+        }, '+ Agregar'),
+        c.numeros.length > 0 && el('button', { class: 'boton boton-peligro', type: 'button', onclick: () => liberarTodos(c) },
+          c.numeros.length === 1 ? 'Liberar' : 'Liberar todos')),
     ),
 
     el('div', { class: 'seccion' },
@@ -502,6 +541,16 @@ async function liberar(numero, whatsapp) {
     toast(`Número ${numero} liberado`);
     await refrescarYReabrir(whatsapp);
   } catch { toast('No se pudo liberar el número.'); }
+}
+
+async function liberarTodos(c) {
+  const aviso = c.abonado > 0 ? `\n\nOjo: ya abonó ${pesos.format(c.abonado)}; quedará como saldo a devolver.` : '';
+  if (!confirm(`¿Liberar ${c.numeros.join(', ')} de ${c.nombre || 'este cliente'}? Vuelven a quedar disponibles.${aviso}`)) return;
+  try {
+    await ok(sb.from('boletas').delete().eq('rifa_id', estado.rifaId).eq('whatsapp', c.whatsapp));
+    toast(c.numeros.length === 1 ? 'Número liberado' : `${c.numeros.length} números liberados`);
+    await refrescarYReabrir(c.whatsapp);
+  } catch { toast('No se pudieron liberar.'); }
 }
 
 async function borrarAbono(abono, whatsapp) {

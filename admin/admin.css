@@ -61,6 +61,10 @@ button, input, select { font: inherit; }
 .enlace { background: none; border: 0; color: var(--texto-suave); font-weight: 600; cursor: pointer; padding: 8px 10px; text-decoration: underline; text-decoration-color: var(--borde); text-underline-offset: 4px; }
 .enlace:hover { color: var(--texto); }
 .enlace-fuerte { color: var(--texto); font-weight: 700; }
+.enlace-peligro { color: var(--error); text-decoration-color: #f3c7c2; }
+.boton.boton-peligro { background: var(--superficie); color: var(--error); border-color: #f3c7c2; }
+.cliente-quieto { cursor: default; padding: 10px; }
+.cliente-quieto:hover { border-color: var(--borde); }
 #salir { text-decoration: none; }
 
 .contenido { max-width: 640px; margin: 0 auto; padding: 4px 16px 16px; }
