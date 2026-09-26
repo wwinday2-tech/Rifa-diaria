@@ -328,19 +328,32 @@ button { font-family: inherit; }
   gap: 8px;
   background: var(--superficie);
   border-radius: 12px;
-  padding: 8px 8px 8px 14px;
+  padding: 8px;
 }
 .pago-fila + .pago-fila { margin-top: 6px; }
+.pago-logo {
+  flex: none;
+  width: 54px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+}
+.pago-logo img { display: block; max-width: 46px; height: auto; }
+.pago-dato { flex: 1; min-width: 0; }
 .pago-fila small { display: block; color: var(--texto-suave); font-size: 0.75rem; font-weight: 600; }
-.pago-fila strong { font-size: 1.1rem; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: 0.01em; }
+.pago-fila strong { display: block; font-size: 1rem; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .copiar {
   font: inherit;
   font-size: 0.85rem;
   font-weight: 700;
   border: 0;
   border-radius: 10px;
-  padding: 8px 12px;
+  padding: 8px 10px;
   min-height: 38px;
+  flex: none;
   background: var(--lima);
   color: #10241a;
   cursor: pointer;
@@ -356,8 +369,29 @@ button { font-family: inherit; }
   background: var(--superficie);
   color: var(--texto);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  position: relative;
 }
-.metodo[aria-checked="true"] { background: var(--lima); border-color: var(--lima); color: #10241a; }
+.metodo img { display: block; }
+/* Elegido: borde verde grueso y un chulito; el fondo sigue blanco para que los logos se vean bien. */
+.metodo[aria-checked="true"] { border: 2px solid var(--lima); box-shadow: 0 0 0 3px var(--lima-claro); }
+.metodo[aria-checked="true"]::after {
+  content: "✓";
+  position: absolute;
+  top: -8px; right: -8px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--lima);
+  color: #10241a;
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
 .boton-whatsapp {
   display: flex;
   align-items: center;

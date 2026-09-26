@@ -72,19 +72,25 @@
       <div class="pago">
         <p class="pago-titulo">Datos de pago</p>
         <div class="pago-fila">
-          <div><small>Nequi</small><strong data-pago="nequi"></strong></div>
+          <span class="pago-logo"><img src="/nequi.png" alt="" width="30" height="24"></span>
+          <div class="pago-dato"><small>Nequi</small><strong data-pago="nequi"></strong></div>
           <button type="button" class="copiar" data-copiar="nequi">Copiar</button>
         </div>
         <div class="pago-fila">
-          <div><small>Llave Bre-B</small><strong data-pago="llave"></strong></div>
+          <span class="pago-logo"><img src="/breb.png" alt="" width="54" height="16"></span>
+          <div class="pago-dato"><small>Llave Bre-B</small><strong data-pago="llave"></strong></div>
           <button type="button" class="copiar" data-copiar="llave">Copiar</button>
         </div>
       </div>
 
       <p class="metodo-titulo">¿Cómo pagaste?</p>
       <div class="metodos" role="radiogroup" aria-label="Método de pago">
-        <button type="button" class="metodo" role="radio" aria-checked="false" data-metodo="Nequi">Nequi</button>
-        <button type="button" class="metodo" role="radio" aria-checked="false" data-metodo="Llave Bre-B">Llave Bre-B</button>
+        <button type="button" class="metodo" role="radio" aria-checked="false" data-metodo="Nequi" aria-label="Nequi">
+          <img src="/nequi.png" alt="" width="25" height="20"><span>Nequi</span>
+        </button>
+        <button type="button" class="metodo" role="radio" aria-checked="false" data-metodo="Llave Bre-B" aria-label="Llave Bre-B">
+          <img src="/breb.png" alt="" width="61" height="18">
+        </button>
       </div>
 
       <p class="nota">Paga y envía tu comprobante por WhatsApp. Tus números quedan separados hasta confirmar el pago.</p>
